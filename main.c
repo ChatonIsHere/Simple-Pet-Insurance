@@ -32,30 +32,77 @@ int pet_had_accident[10];                           // The pets accident data (0
 int insurance_cost[10];                             // The array of insurance costs.
 int idx_curr_pet = 0;                               // The current index of processed pet (i.e. pet_gender[idx_curr_pet] is gender of currently added pet).
 
-void load_customer_name()
+// Temporary use variables
+char tmp[20];                                       // Any temporary variable that needs to be stored (i.e. integer inputs for the help menu).
+
+void load_customer_first_name()
 {
-    // Print the prompt for customer name.
-    // Load the customer name using scanf().
-    // Print help, if user requires it and return.
-    // If user entered valid data, then switch current state to  1 (i.e. animal name loading) and return.
+    system("cls");
+    printf("\Customer First Name:\n"); // Print the prompt for customer name.
+    scanf("%s", owner_first_name); // Load the customer name using scanf().
+    if (owner_first_name[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your first name");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, then switch current state to 1 (i.e. animal name loading) and return.
+    {
+        curr_state++;
+    }
+}
+
+void load_customer_surname()
+{
+    system("cls");
+    printf("\Customer Surname:\n"); // Print the prompt for customer name.
+    scanf("%s", owner_surname); // Load the customer name using scanf().
+    if (owner_surname[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your surname");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, then switch current state to 1 (i.e. animal name loading) and return.
+    {
+        curr_state++;
+    }
 }
 
 void load_animal_name()
 {
-    // Print out the prompt for animal name.
-    // Load the info using scanf().
-    // Print help, if user requires it and return.
-    // If user entered valid data, store it into data array.
-    // Switch current state to 2 (i.e. animal gender loading) and return.
+    system("cls");
+    printf("\Animal Name:\n"); // Print out the prompt for animal name.
+    scanf("%s", pet_names[idx_curr_pet]); // Load the info using scanf().
+    if (pet_names[idx_curr_pet][0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your pet's name");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, store it into data array.
+    {
+        curr_state++; // Switch current state to 2 (i.e. animal gender loading) and return.
+    }
 }
 
 void load_animal_gender()
 {
-    // Print out the prompt for animal gender.
-    // Load the info using scanf().
-    // Print help, if user requires it and return.
-    // If user entered valid data, store it into data array.
-    // Switch current state to 3 (i.e. animal type loading) and return.
+    system("cls");
+    printf("\Animal Gender:\n"); // Print out the prompt for animal gender.
+    scanf("%s", tmp); // Load the info using scanf().
+    if (tmp[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your pet's Gender");
+        printf("\n      0=Male 1=Female");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, store it into data array.
+    {
+        pet_gender[idx_curr_pet] = atoi(tmp);
+        curr_state++; // Switch current state to 3 (i.e. animal type loading) and return.
+    }
 }
 
 void load_animal_type()
@@ -130,42 +177,47 @@ int main(int argc, const char **argv)
         {
             // The initial state, where customer name is loaded.
             case 0:
-                load_customer_name();
+                load_customer_first_name();
+                break;
+
+            // The initial state, where customer name is loaded.
+            case 1:
+                load_customer_surname();
                 break;
 
             // The state, in which the animal name is loaded.
-            case 1:
+            case 2:
                 load_animal_name();
                 break;
 
             // The state, in which the animal gender is loaded.
-            case 2:
+            case 3:
                 load_animal_gender();
                 break;
 
             // The state, in which the animal type is loaded.
-            case 3:
+            case 4:
                 load_animal_type();
                 break;
 
             // The state, in which the animal castration info is loaded.
-            case 4:
-                load_animal_castration_info();
+            case 5:
+                load_animal_castration_info();system("cls");
                 break;
 
             // The state, in which the animal accident info is loaded.
-            case 5:
+            case 6:
                 load_animal_accident_info();
                 break;
 
             // The state for deciding, if user wants to continue
             // with adding more animals.
-            case 6:
+            case 7:
                 check_continue();
                 break;
 
             // The state for printing the insurance result.
-            case 7:
+            case 8:
                 print_result();
                 break;
         }
