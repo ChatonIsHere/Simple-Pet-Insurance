@@ -235,15 +235,15 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
     }
     if (pet_age[idx_curr_pet] > 5)
     {
-        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*2)*(pet_age[idx_curr_pet]-5);
+        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + (insurance_cost[idx_curr_pet]/0.02)*(pet_age[idx_curr_pet]-5);
     }
-    else if (pet_age[idx_curr_pet] < 5 && pet_gender[idx_curr_pet] == 0)
+    else if (pet_age[idx_curr_pet] < 2 && pet_gender[idx_curr_pet] == 0)
     {
-        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*5);
+        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + (insurance_cost[idx_curr_pet]/0.05);
     }
     if (pet_had_accident[idx_curr_pet] == 1)
     {
-        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*5);
+        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + (insurance_cost[idx_curr_pet]/0.05);
     }
     printf("Insurance cost:\n");
     printf("%c%.2f", 156, insurance_cost[idx_curr_pet]);
