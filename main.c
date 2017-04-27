@@ -2,15 +2,17 @@
 #include <stdlib.h>
 
 // Variables for the state machine control flow.
-int curr_state = 0;						            // Numer identifying  the current state of program (0 - loading of owner name,
-                                                    //                                                  1 - loading animal name,
-                                                    //                                                  2 - loading animal gender,
-                                                    //                                                  3 - loading animal type,
-                                                    //                                                  4 - loading animal castration info,
-                                                    //                                                  5 - loading animal accident info,
-                                                    //                                                  6 - asking if another animal should be added,
-                                                    //                                                  7 - printing out the results,
-                                                    //                                                  8 - exiting).
+int curr_state = 0;						            // Numer identifying  the current state of program (0 - loading of owner first name,
+                                                    //                                                  1 - loading of owner surname,
+                                                    //                                                  2 - loading animal name,
+                                                    //                                                  3 - loading animal gender,
+                                                    //                                                  4 - loading animal type,
+                                                    //                                                  5 - loading animal age,
+                                                    //                                                  6 - loading animal castration info,
+                                                    //                                                  7 - loading animal accident info,
+                                                    //                                                  8 - calculating insurance price,
+                                                    //                                                  9 - printing out the results,
+                                                    //                                                  10 - exiting).
 
 // Customer name variables.
 char owner_first_name[20];                          // The pet owner first name (maximal length is 20).
@@ -24,6 +26,11 @@ char pet_type[10];                                  // The pets types encoded as
                                                     //                                              'C' - cat,
                                                     //                                              'B' - bird,
                                                     //                                              'R' - reptile).
+float pet_type_price[5] = {50, 80, 40, 60, 10};     // The pets insurance prices                   ('0' - neutered dog,
+                                                    //                                              '1' - not neutered dog
+                                                    //                                              '2' - neutered cat,
+                                                    //                                              '3' - not neutered cat,
+                                                    //                                              '4' - bird or reptile.)
 int pet_age[10];                                    // The pets ages.
 int pet_is_neutered[10];                            // The pets castration data (0 - not neutered,
                                                     //                           1 - neutered).
@@ -38,7 +45,8 @@ char tmp[20];                                       // Any temporary variable th
 void load_customer_first_name()
 {
     system("cls");
-    printf("\Customer First Name:\n"); // Print the prompt for customer name.
+    printf("Customer First Name:\n"); // Print the prompt for customer name.
+    fflush(stdin);
     scanf("%s", owner_first_name); // Load the customer name using scanf().
     if (owner_first_name[0] == '?') // Print help, if user requires it and return.
     {
@@ -48,14 +56,15 @@ void load_customer_first_name()
     }
     else // If user entered valid data, then switch current state to 1 (i.e. animal name loading) and return.
     {
-        curr_state++;
+        curr_state++; // Move to next state.
     }
 }
 
 void load_customer_surname()
 {
     system("cls");
-    printf("\Customer Surname:\n"); // Print the prompt for customer name.
+    printf("Customer Surname:\n"); // Print the prompt for customer name.
+    fflush(stdin);
     scanf("%s", owner_surname); // Load the customer name using scanf().
     if (owner_surname[0] == '?') // Print help, if user requires it and return.
     {
@@ -65,14 +74,15 @@ void load_customer_surname()
     }
     else // If user entered valid data, then switch current state to 1 (i.e. animal name loading) and return.
     {
-        curr_state++;
+        curr_state++; // Move to next state.
     }
 }
 
 void load_animal_name()
 {
     system("cls");
-    printf("\Animal Name:\n"); // Print out the prompt for animal name.
+    printf("Animal Name:\n"); // Print out the prompt for animal name.
+    fflush(stdin);
     scanf("%s", pet_names[idx_curr_pet]); // Load the info using scanf().
     if (pet_names[idx_curr_pet][0] == '?') // Print help, if user requires it and return.
     {
@@ -82,14 +92,15 @@ void load_animal_name()
     }
     else // If user entered valid data, store it into data array.
     {
-        curr_state++; // Switch current state to 2 (i.e. animal gender loading) and return.
+        curr_state++; // Move to next state.
     }
 }
 
 void load_animal_gender()
 {
     system("cls");
-    printf("\Animal Gender:\n"); // Print out the prompt for animal gender.
+    printf("Animal Gender:\n"); // Print out the prompt for animal gender.
+    fflush(stdin);
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
@@ -101,37 +112,142 @@ void load_animal_gender()
     else // If user entered valid data, store it into data array.
     {
         pet_gender[idx_curr_pet] = atoi(tmp);
-        curr_state++; // Switch current state to 3 (i.e. animal type loading) and return.
+        curr_state++; // Move to next state.
     }
 }
 
 void load_animal_type()
 {
-    // Print out the prompt for animal type.
-    // Load the info using scanf().
-    // Print help, if user requires it and return.
-    // If user entered invalid animal type, print out error and return.
-    // If user entered valid data, store it into data array.
-    // Switch current state to 4 (i.e. animal castration info loading) and return.
+    system("cls");
+    printf("Animal Type:\n"); // Print out the prompt for animal type.
+    fflush(stdin);
+    scanf("%c", &pet_type[idx_curr_pet]); // Load the info using scanf().
+    if (pet_type[idx_curr_pet] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your pet's name");
+        printf("\n      Please enter D, C, B or R");
+        printf("\n      (Dog, Cat, Bird or Reptile)");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else if (pet_type[idx_curr_pet] != 'D' && pet_type[idx_curr_pet] != 'C' && pet_type[idx_curr_pet] != 'B' && pet_type[idx_curr_pet] != 'R')// If user entered invalid animal type, print out error and return. If user entered valid data, store it into data array.
+    {
+        printf("\nError: That is an invalid input");
+        printf("\n       Please enter D, C, B or R");
+        printf("\n       (Dog, Cat, Bird or Reptile)");
+        printf("\n       Press any key to continue");
+        getch();
+    }
+    else
+    {
+        curr_state++; // Move to next state.
+    }
+}
+
+void load_animal_age()
+{
+    system("cls");
+    printf("Animal Age:\n"); // Print out the prompt for animal age.
+    fflush(stdin);
+    scanf("%s", tmp); // Load the info using scanf().
+    if (tmp[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your pet's age");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, store it into data array.
+    {
+        pet_age[idx_curr_pet] = atoi(tmp);
+        curr_state++; // Move to next state.
+    }
 }
 
 void load_animal_castration_info()
 {
-    // Print out the prompt for animal castration info.
-    // Load the info using scanf().
-    // Print help, if user requires it.
-    // If user entered valid data, store it into data array.
-    // Switch current state to 5 (i.e. animal accident info loading) and return.
+    system("cls");
+    printf("Animal Castration Status:\n"); // Print out the prompt for animal castration info.
+    fflush(stdin);
+    scanf("%s", tmp); // Load the info using scanf().
+    if (tmp[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your pet's Castration Status");
+        printf("\n      0=Not Neutered 1=Neutered");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, store it into data array.
+    {
+        pet_is_neutered[idx_curr_pet] = atoi(tmp);
+        curr_state++; // Move to next state.
+    }
 }
 
 void load_animal_accident_info()
 {
-    // Print out the prompt for animal accident info.
-    // Load the info using scanf().
-    // Print help, if user requires it and return.
-    // If user entered valid data, store it into data array.
-    // Calculate the insurance fee, store it into data array and print out the insurance info)
-    // Switch current state to 6 (i.e. continue checking) and return.
+    system("cls");
+    printf("Animal Accident Status:\n"); // Print out the prompt for animal accident info.
+    fflush(stdin);
+    scanf("%s", tmp); // Load the info using scanf().
+    if (tmp[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Please enter your pet's Accident Status");
+        printf("\n      0=No Accident 1=Had Accident");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else // If user entered valid data, store it into data array.
+    {
+        pet_had_accident[idx_curr_pet] = atoi(tmp);
+        curr_state++; // Move to next state.
+    }
+}
+
+void calculate_animal_insurance() // Calculate the insurance fee, store it into data array and print out the insurance info.
+{
+    system("cls");
+    switch (pet_type[idx_curr_pet])
+    {
+        case 'D':
+            if (pet_is_neutered[idx_curr_pet] == 1)
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[0];
+            }
+            else
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[1];
+            }
+        break;
+        case 'C':
+            if (pet_is_neutered[idx_curr_pet] == 1)
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[2];
+            }
+            else
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[3];
+            }
+        break;
+        case 'B'||'R':
+            insurance_cost[idx_curr_pet] = pet_type_price[4];
+        break;
+    }
+    if (pet_age[idx_curr_pet] > 5)
+    {
+        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*2)*(pet_age[idx_curr_pet]-5);
+    }
+    else if (pet_age[idx_curr_pet] < 5)
+    {
+        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*5);
+    }
+    if (pet_had_accident[idx_curr_pet] == 1)
+    {
+        insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*5);
+    }
+    printf("Insurance cost:\n");
+    printf("%c%.2f", 156, insurance_cost[idx_curr_pet]);
+    getch();
+    curr_state++; // Move to next state.
 }
 
 void check_continue()
@@ -200,24 +316,33 @@ int main(int argc, const char **argv)
                 load_animal_type();
                 break;
 
-            // The state, in which the animal castration info is loaded.
+            // The state, in which the animal age is loaded.
             case 5:
+                load_animal_age();
+                break;
+
+            // The state, in which the animal castration info is loaded.
+            case 6:
                 load_animal_castration_info();system("cls");
                 break;
 
+            // The state, in which the animal insurance price is calculated.
+            case 7:
+                calculate_animal_insurance();
+                break;
+
             // The state, in which the animal accident info is loaded.
-            case 6:
+            case 8:
                 load_animal_accident_info();
                 break;
 
-            // The state for deciding, if user wants to continue
-            // with adding more animals.
-            case 7:
+            // The state for deciding, if user wants to continue with adding more animals.
+            case 9:
                 check_continue();
                 break;
 
             // The state for printing the insurance result.
-            case 8:
+            case 10:
                 print_result();
                 break;
         }
