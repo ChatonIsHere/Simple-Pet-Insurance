@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 
 // Variables for the state machine control flow.
 int curr_state = 0;						            // Numer identifying  the current state of program (0 - loading of owner first name,
@@ -36,7 +37,7 @@ int pet_is_neutered[10];                            // The pets castration data 
                                                     //                           1 - neutered).
 int pet_had_accident[10];                           // The pets accident data (0 - did not have accident,
                                                     //                         1 - had accident).
-int insurance_cost[10];                             // The array of insurance costs.
+float insurance_cost[10];                             // The array of insurance costs.
 int idx_curr_pet = 0;                               // The current index of processed pet (i.e. pet_gender[idx_curr_pet] is gender of currently added pet).
 
 // Temporary use variables
@@ -236,7 +237,7 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
     {
         insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*2)*(pet_age[idx_curr_pet]-5);
     }
-    else if (pet_age[idx_curr_pet] < 5)
+    else if (pet_age[idx_curr_pet] < 5 && pet_gender[idx_curr_pet] == 0)
     {
         insurance_cost[idx_curr_pet] = insurance_cost[idx_curr_pet] + ((insurance_cost[idx_curr_pet]/100)*5);
     }
