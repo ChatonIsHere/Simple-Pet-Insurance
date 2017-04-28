@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <string.h>
 
 // Variables for the state machine control flow.
 int curr_state = 0;						            // Numer identifying  the current state of program (0 - loading of owner first name,
@@ -37,7 +38,8 @@ int pet_is_neutered[10];                            // The pets castration data 
                                                     //                           1 - neutered).
 int pet_had_accident[10];                           // The pets accident data (0 - did not have accident,
                                                     //                         1 - had accident).
-float insurance_cost[10];                             // The array of insurance costs.
+float insurance_cost[10];                           // The array of insurance costs.
+float quote;                                        // The final insurance quote.
 int idx_curr_pet = 0;                               // The current index of processed pet (i.e. pet_gender[idx_curr_pet] is gender of currently added pet).
 
 // Temporary use variables
@@ -102,6 +104,7 @@ void load_animal_gender()
     system("cls");
     printf("Animal Gender:\n"); // Print out the prompt for animal gender.
     fflush(stdin);
+    memset(tmp,'\0',20);
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
@@ -150,6 +153,7 @@ void load_animal_age()
     system("cls");
     printf("Animal Age:\n"); // Print out the prompt for animal age.
     fflush(stdin);
+    memset(tmp,'\0',20);
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
@@ -169,6 +173,7 @@ void load_animal_castration_info()
     system("cls");
     printf("Animal Castration Status:\n"); // Print out the prompt for animal castration info.
     fflush(stdin);
+    memset(tmp,'\0',20);
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
@@ -189,6 +194,7 @@ void load_animal_accident_info()
     system("cls");
     printf("Animal Accident Status:\n"); // Print out the prompt for animal accident info.
     fflush(stdin);
+    memset(tmp,'\0',20);
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
@@ -253,20 +259,48 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
 
 void check_continue()
 {
-    // Ask user, if they want to add extra animal.
-    // Load user input using scanf().
-    // Print help, if user requires it and return.
-    // If user does not require to add more animals, switch current state to o 7 (i.e. result printing) and return.
-    // If the maximal number of animals per owner would be exceeded, print error message and switch to 7 (i.e. result printing).
-    // Otherwise increase index of current animal and switch state to 1 (i.e. animal name loading) and return.
+    system("cls");
+    printf("Would you like to add an additional animal?"); // Ask user, if they want to add extra animal.
+    memset(tmp,'\0',20);
+    scanf("%c", &tmp); // Load user input using scanf().
+    if (tmp[0] == '?') // Print help, if user requires it and return.
+    {
+        printf("\nHelp: Add an additional animal? Y/N");
+        printf("\n      Press any key to continue");
+        getch();
+    }
+    else if (tmp[0] == 'N')// If user does not require to add more animals, switch current state to o 7 (i.e. result printing) and return.
+    {
+        curr_state++;
+    }
+    else if (tmp[0] == 'Y')
+    {
+        if ((idx_curr_pet+1) == 11) // If the maximal number of animals per owner would be exceeded, print error message and switch to next (i.e. result printing).
+        {
+            system("cls");
+            printf("Adding another animal would exceed the limit.");
+            printf("\nPress any key to continue to the print page");
+            getch();
+            curr_state++;
+        }
+        else // Otherwise increase index of current animal and switch state to 2 (i.e. animal name loading) and return.
+        {
+            idx_curr_pet++;
+            curr_state = 2;
+        }
+    }
 }
 
 void print_result()
 {
-    // Iterate over data arrays.
+    int i;
+    for (i = 0; i <= idx_curr_pet; i++) // Iterate over data arrays.
+    {
+        printf("%s %s", owner_first_name, owner_surname);
+    }
     // Calculate the total insurance price.
     // Print out all necessary information.
-    // Switch state to 8 and return.
+    // Switch state to next and return.
 }
 
 int main(int argc, const char **argv)
@@ -287,7 +321,7 @@ int main(int argc, const char **argv)
     }
 
     // Run indefinitely, until program reaches the state / (i.e. the termination state).
-    while (curr_state != 8)
+    while (curr_state != 11)
     {
         // Check the current state so we can do stuff according to it.
         switch (curr_state)
@@ -327,14 +361,14 @@ int main(int argc, const char **argv)
                 load_animal_castration_info();system("cls");
                 break;
 
-            // The state, in which the animal insurance price is calculated.
+            // The state, in which the animal accident info is loaded.
             case 7:
-                calculate_animal_insurance();
+                load_animal_accident_info();
                 break;
 
-            // The state, in which the animal accident info is loaded.
+            // The state, in which the animal insurance price is calculated.
             case 8:
-                load_animal_accident_info();
+                calculate_animal_insurance();
                 break;
 
             // The state for deciding, if user wants to continue with adding more animals.
@@ -348,7 +382,5 @@ int main(int argc, const char **argv)
                 break;
         }
     }
-
-    // Terminate gracefully.
-	return 0;
+	return 0; // Terminate gracefully.
 }
