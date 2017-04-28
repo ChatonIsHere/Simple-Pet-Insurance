@@ -16,11 +16,11 @@ int curr_state = 0;						            // Numer identifying  the current state of 
                                                     //                                                  9 - printing out the results,
                                                     //                                                  10 - exiting).
 
-                                                    // Customer name variables.
+// Customer name variables.
 char owner_first_name[20];                          // The pet owner first name (maximal length is 20).
 char owner_surname[20];                             // The pet owner surname (maximal length is 20).
 
-                                                    // Customer's pets data variables.
+// Customer's pets data variables.
 char pet_names[10][20];                             // The pets names (maximal name length is 20; maximal number of pets is 10).
 int pet_gender[10];                                 // The pets genders (0 - male,
                                                     //                   1 - female).
@@ -38,15 +38,11 @@ int pet_is_neutered[10];                            // The pets castration data 
                                                     //                           1 - neutered).
 int pet_had_accident[10];                           // The pets accident data (0 - did not have accident,
                                                     //                         1 - had accident).
-float insurance_cost[10];                           // The array of insurance total costs.
-float insurance_base_price[10];                     // The array of insurance base prices.
-float insurance_mod_old[10];                        // The arrays of insurance modifiers.
-float insurance_mod_young_male[10];
-float insurance_mod_accident[10];
+float insurance_cost[10];                           // The array of insurance costs.
 float quote;                                        // The final insurance quote.
 int idx_curr_pet = 0;                               // The current index of processed pet (i.e. pet_gender[idx_curr_pet] is gender of currently added pet).
 
-                                                    // Temporary use variables
+// Temporary use variables
 char tmp[20];                                       // Any temporary variable that needs to be stored (i.e. integer inputs for the help menu).
 
 void load_customer_first_name()
@@ -219,49 +215,41 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
     system("cls");
     switch (pet_type[idx_curr_pet])
     {
-    case 'D':
-        if (pet_is_neutered[idx_curr_pet] == 1)
-        {
-            insurance_cost[idx_curr_pet] = pet_type_price[0];
-            insurance_base_price[idx_curr_pet] = pet_type_price[0];
-        }
-        else
-        {
-            insurance_cost[idx_curr_pet] = pet_type_price[1];
-            insurance_base_price[idx_curr_pet] = pet_type_price[1];
-        }
+        case 'D':
+            if (pet_is_neutered[idx_curr_pet] == 1)
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[0];
+            }
+            else
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[1];
+            }
         break;
-    case 'C':
-        if (pet_is_neutered[idx_curr_pet] == 1)
-        {
-            insurance_cost[idx_curr_pet] = pet_type_price[2];
-            insurance_base_price[idx_curr_pet] = pet_type_price[2];
-        }
-        else
-        {
-            insurance_cost[idx_curr_pet] = pet_type_price[3];
-            insurance_base_price[idx_curr_pet] = pet_type_price[3];
-        }
+        case 'C':
+            if (pet_is_neutered[idx_curr_pet] == 1)
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[2];
+            }
+            else
+            {
+                insurance_cost[idx_curr_pet] = pet_type_price[3];
+            }
         break;
-    case 'B'||'R':
-        insurance_cost[idx_curr_pet] = pet_type_price[4];
-        insurance_base_price[idx_curr_pet] = pet_type_price[4];
+        case 'B'||'R':
+            insurance_cost[idx_curr_pet] = pet_type_price[4];
         break;
     }
     if (pet_age[idx_curr_pet] > 5)
     {
-        insurance_mod_old[idx_curr_pet] = insurance_base_price[idx_curr_pet] * 0.05 * (pet_age[idx_curr_pet] - 5);
-        insurance_cost[idx_curr_pet] += insurance_mod_old[idx_curr_pet];
+        insurance_cost[idx_curr_pet] *= 0.9 + 0.02 * pet_age[idx_curr_pet];
     }
     else if (pet_age[idx_curr_pet] < 2 && pet_gender[idx_curr_pet] == 0)
     {
-        insurance_mod_young_male[idx_curr_pet] = insurance_base_price[idx_curr_pet] * 0.05;
-        insurance_cost[idx_curr_pet] += insurance_mod_young_male[idx_curr_pet];
+        insurance_cost[idx_curr_pet] *= 1.05;
     }
     if (pet_had_accident[idx_curr_pet] == 1)
     {
-        insurance_mod_accident[idx_curr_pet] = insurance_base_price[idx_curr_pet] * 0.05;
-        insurance_cost[idx_curr_pet] += insurance_mod_accident[idx_curr_pet];
+        insurance_cost[idx_curr_pet] *= 1.05;
     }
     printf("Insurance cost:\n");
     printf("%c%.2f", 156, insurance_cost[idx_curr_pet]);
@@ -272,7 +260,7 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
 void check_continue()
 {
     system("cls");
-    printf("Would you like to add an additional animal?\n"); // Ask user, if they want to add extra animal.
+    printf("Would you like to add an additional animal?"); // Ask user, if they want to add extra animal.
     memset(tmp,'\0',20);
     scanf("%c", &tmp); // Load user input using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
@@ -305,31 +293,16 @@ void check_continue()
 
 void print_result()
 {
-    system("cls");
-    printf("%s %s - %d animal(s)", owner_first_name, owner_surname, idx_curr_pet+1);
+    printf("%s %s\n", owner_first_name, owner_surname);
     int i;
     for (i = 0; i <= idx_curr_pet; i++) // Iterate over data arrays.
     {
-        printf("\n\n%s - %c%.2f", pet_names[i], 156, insurance_base_price[i]);
-        if (insurance_mod_old[i] > 0)
-        {
-            printf("\n(Age > 5: +%c%.2f)", 156, insurance_mod_old[i]);
-        }
-        if (insurance_mod_young_male[i] > 0)
-        {
-            printf("\n(Male Age < 2: +%c%.2f)", 156, insurance_mod_old[i]);
-        }
-        if (insurance_mod_accident[i] > 0)
-        {
-            printf("\n(Recent Accident: +%c%.2f)", 156, insurance_mod_old[i]);
-        }
-        printf("\nTotal: %c%.2f", 156, insurance_cost[i]);
+        printf("\n%s %s", owner_first_name, owner_surname);
         quote += insurance_cost[idx_curr_pet]; // Calculate the total insurance price.
     }
     getch();
 
-    // Print out all necessary information, including the base prices and insurance modifiers.
-    // If insurance modifier is set to 0, it can be ignored, since it was not used.
+    // Print out all necessary information.
     curr_state++; // Switch state to next and return.
 }
 
@@ -341,17 +314,13 @@ int main(int argc, const char **argv)
     int i;
     for (i = 0; i < 10; i++)
     {
-        pet_names[i][0] = '\0';          // Empty string.
-        pet_gender[i] = -1;              // -1 as not set.
-        pet_type[i] = 'U';               // 'U' as undefined type.
-        pet_age[i] = -1;                 // -1 as not set.
-        pet_is_neutered[i] = -1;         // -1 as not set.
-        pet_had_accident[i] = -1;        // -1 as not set.
-        insurance_cost[i] = 0;           // 0 as not set.
-        insurance_base_price[i] = 0;     // 0 as not set.
-        insurance_mod_old[i] = 0;        // 0 as not set.
-        insurance_mod_young_male[i] = 0; // 0 as not set.
-        insurance_mod_accident[i] = 0;   // 0 as not set.
+        pet_names[i][0] = '\0';     // Empty string.
+        pet_gender[i] = -1;         // -1 as not set.
+        pet_type[i] = 'U';          // 'U' as undefined type.
+        pet_age[i] = -1;            // -1 as not set.
+        pet_is_neutered[i] = -1;    // -1 as not set.
+        pet_had_accident[i] = -1;   // -1 as not set.
+        insurance_cost[i] = -1;     // -1 as not set.
     }
 
     // Run indefinitely, until program reaches the state / (i.e. the termination state).
@@ -360,62 +329,61 @@ int main(int argc, const char **argv)
         // Check the current state so we can do stuff according to it.
         switch (curr_state)
         {
-        // The initial state, where customer name is loaded.
-        case 0:
-            load_customer_first_name();
-            break;
+            // The initial state, where customer name is loaded.
+            case 0:
+                load_customer_first_name();
+                break;
 
-        // The initial state, where customer name is loaded.
-        case 1:
-            load_customer_surname();
-            break;
+            // The initial state, where customer name is loaded.
+            case 1:
+                load_customer_surname();
+                break;
 
-        // The state, in which the animal name is loaded.
-        case 2:
-            load_animal_name();
-            break;
+            // The state, in which the animal name is loaded.
+            case 2:
+                load_animal_name();
+                break;
 
-        // The state, in which the animal gender is loaded.
-        case 3:
-            load_animal_gender();
-            break;
+            // The state, in which the animal gender is loaded.
+            case 3:
+                load_animal_gender();
+                break;
 
-        // The state, in which the animal type is loaded.
-        case 4:
-            load_animal_type();
-            break;
+            // The state, in which the animal type is loaded.
+            case 4:
+                load_animal_type();
+                break;
 
-        // The state, in which the animal age is loaded.
-        case 5:
-            load_animal_age();
-            break;
+            // The state, in which the animal age is loaded.
+            case 5:
+                load_animal_age();
+                break;
 
-        // The state, in which the animal castration info is loaded.
-        case 6:
-            load_animal_castration_info();
-            system("cls");
-            break;
+            // The state, in which the animal castration info is loaded.
+            case 6:
+                load_animal_castration_info();system("cls");
+                break;
 
-        // The state, in which the animal accident info is loaded.
-        case 7:
-            load_animal_accident_info();
-            break;
+            // The state, in which the animal accident info is loaded.
+            case 7:
+                load_animal_accident_info();
+                break;
 
-        // The state, in which the animal insurance price is calculated.
-        case 8:
-            calculate_animal_insurance();
-            break;
+            // The state, in which the animal insurance price is calculated.
+            case 8:
+                calculate_animal_insurance();
+                break;
 
-        // The state for deciding, if user wants to continue with adding more animals.
-        case 9:
-            check_continue();
-            break;
+            // The state for deciding, if user wants to continue with adding more animals.
+            case 9:
+                check_continue();
+                break;
 
-        // The state for printing the insurance result.
-        case 10:
-            print_result();
-            break;
+            // The state for printing the insurance result.
+            case 10:
+                print_result();
+                break;
         }
     }
-    return 0; // Terminate gracefully.
+	return 0; // Terminate gracefully.
 }
