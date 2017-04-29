@@ -4,7 +4,7 @@
 #include <string.h>
 
 // Variables for the state machine control flow.
-int curr_state = 0;						            // Numer identifying  the current state of program (0 - loading of owner first name,
+int curr_state = 0;						            // Number identifying  the current state of program (0 - loading of owner first name,
                                                     //                                                  1 - loading of owner surname,
                                                     //                                                  2 - loading animal name,
                                                     //                                                  3 - loading animal gender,

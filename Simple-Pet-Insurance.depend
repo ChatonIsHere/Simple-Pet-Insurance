@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1493297776 source:c:\users\profe\github\simple-pet-insurance\main.c
+1493473705 source:c:\users\profe\github\simple-pet-insurance\main.c
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
+	<string.h>
 
 1493298287 source:c:\users\profe\github\simple-pet-insurance\resource.rc
 
