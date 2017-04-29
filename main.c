@@ -243,7 +243,8 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
             insurance_base_price[idx_curr_pet] = pet_type_price[3];
         }
         break;
-    case 'B'||'R':
+    case 'B':
+    case 'R':
         insurance_cost[idx_curr_pet] = pet_type_price[4];
         insurance_base_price[idx_curr_pet] = pet_type_price[4];
         break;
@@ -310,26 +311,24 @@ void print_result()
     int i;
     for (i = 0; i <= idx_curr_pet; i++) // Iterate over data arrays.
     {
-        printf("\n\n%s - %c%.2f", pet_names[i], 156, insurance_base_price[i]);
-        if (insurance_mod_old[i] > 0)
+        printf("\n\n%s - %c%.2f", pet_names[i], 156, insurance_base_price[i]); // Print out all necessary information, including the base prices and insurance modifiers.
+        if (insurance_mod_old[i] > 0) // If insurance modifier is set to 0, it can be ignored, since it was not used.
         {
             printf("\n(Age > 5: +%c%.2f)", 156, insurance_mod_old[i]);
         }
         if (insurance_mod_young_male[i] > 0)
         {
-            printf("\n(Male Age < 2: +%c%.2f)", 156, insurance_mod_old[i]);
+            printf("\n(Male Age < 2: +%c%.2f)", 156, insurance_mod_young_male[i]);
         }
         if (insurance_mod_accident[i] > 0)
         {
-            printf("\n(Recent Accident: +%c%.2f)", 156, insurance_mod_old[i]);
+            printf("\n(Recent Accident: +%c%.2f)", 156, insurance_mod_accident[i]);
         }
-        printf("\nTotal: %c%.2f", 156, insurance_cost[i]);
-        quote += insurance_cost[idx_curr_pet]; // Calculate the total insurance price.
+        printf("\nSubtotal: %c%.2f", 156, insurance_cost[i]);
+        quote += insurance_cost[i]; // Calculate the total insurance price.
     }
+    printf("\n\nTotal: %c%.2f", 156, quote);
     getch();
-
-    // Print out all necessary information, including the base prices and insurance modifiers.
-    // If insurance modifier is set to 0, it can be ignored, since it was not used.
     curr_state++; // Switch state to next and return.
 }
 
