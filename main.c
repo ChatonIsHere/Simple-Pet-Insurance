@@ -41,8 +41,8 @@ int pet_had_accident[10];                           // The pets accident data (0
 float insurance_cost[10];                           // The array of insurance total costs.
 float insurance_base_price[10];                     // The array of insurance base prices.
 float insurance_mod_old[10];                        // The arrays of insurance modifiers.
-float insurance_mod_young_male[10];
-float insurance_mod_accident[10];
+float insurance_mod_young_male[10];                 //
+float insurance_mod_accident[10];                   //
 float quote;                                        // The final insurance quote.
 int idx_curr_pet = 0;                               // The current index of processed pet (i.e. pet_gender[idx_curr_pet] is gender of currently added pet).
 
@@ -251,17 +251,19 @@ void calculate_animal_insurance() // Calculate the insurance fee, store it into 
     }
     if (pet_age[idx_curr_pet] > 5)
     {
-        insurance_mod_old[idx_curr_pet] = insurance_base_price[idx_curr_pet] * 0.05 * (pet_age[idx_curr_pet] - 5);
+        int i;
+        for (i = 0, insurance_mod_old[idx_curr_pet] = 0; i < pet_age[idx_curr_pet] - 5; i++)
+            insurance_mod_old[idx_curr_pet] += (insurance_cost[idx_curr_pet] + insurance_mod_old[idx_curr_pet]) * 0.02;
         insurance_cost[idx_curr_pet] += insurance_mod_old[idx_curr_pet];
     }
     else if (pet_age[idx_curr_pet] < 2 && pet_gender[idx_curr_pet] == 0)
     {
-        insurance_mod_young_male[idx_curr_pet] = insurance_base_price[idx_curr_pet] * 0.05;
+        insurance_mod_young_male[idx_curr_pet] = insurance_cost[idx_curr_pet] * 0.05;
         insurance_cost[idx_curr_pet] += insurance_mod_young_male[idx_curr_pet];
     }
     if (pet_had_accident[idx_curr_pet] == 1)
     {
-        insurance_mod_accident[idx_curr_pet] = insurance_base_price[idx_curr_pet] * 0.05;
+        insurance_mod_accident[idx_curr_pet] = insurance_cost[idx_curr_pet] * 0.05;
         insurance_cost[idx_curr_pet] += insurance_mod_accident[idx_curr_pet];
     }
     printf("Insurance cost:\n");
