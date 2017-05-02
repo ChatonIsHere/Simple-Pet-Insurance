@@ -379,6 +379,13 @@ void check_continue()
             curr_state = 2;
         }
     }
+    else
+    {
+        printf("\nError: That is an invalid input");
+        printf("\nHelp:  Add an additional animal? Y/N");
+        printf("\n       Press any key to continue");
+        getch();
+    }
 }
 
 void print_result()
