@@ -119,26 +119,28 @@ void load_animal_gender()
     fflush(stdin);
     memset(tmp,'\0',20);
     scanf("%s", tmp); // Load the info using scanf().
-    if ((tmp[0] == '0' || tmp[0] == '1') && tmp[1] == '\0')
+    if (tmp[0] == '?') // Print help, if user requires it and return.
     {
-        if (tmp[0] == '?') // Print help, if user requires it and return.
-        {
-            printf("\nHelp: Please enter your pet's Gender");
-            printf("\n      0=Male 1=Female");
-            printf("\n      Press any key to continue");
-            getch();
-        }
-        else // If user entered valid data, store it into data array.
-        {
-            pet_gender[idx_curr_pet] = atoi(tmp);
-            curr_state++; // Move to next state.
-        }
+        printf("\nHelp: Please enter your pet's Gender");
+        printf("\n      0=Male 1=Female");
+        printf("\n      Press any key to continue");
+        getch();
     }
     else
     {
-        printf("\nError: That is an invalid input");
-        printf("\n       Press any key to continue");
-        getch();
+        if ((tmp[0] == '0' || tmp[0] == '1') && tmp[1] == '\0')
+        {
+            pet_gender[idx_curr_pet] = atoi(tmp); // If user entered valid data, store it into data array.
+            curr_state++; // Move to next state.
+        }
+        else
+        {
+            printf("\nError: That is an invalid input");
+            printf("\nHelp:  Please enter your pet's Gender");
+            printf("\n       0=Male 1=Female");
+            printf("\n       Press any key to continue");
+            getch();
+        }
     }
 }
 
@@ -159,6 +161,7 @@ void load_animal_type()
     else if (pet_type[idx_curr_pet] != 'D' && pet_type[idx_curr_pet] != 'C' && pet_type[idx_curr_pet] != 'B' && pet_type[idx_curr_pet] != 'R')// If user entered invalid animal type, print out error and return. If user entered valid data, store it into data array.
     {
         printf("\nError: That is an invalid input");
+        printf("\nHelp:  Please enter your pet's name");
         printf("\n       Please enter D, C, B or R");
         printf("\n       (Dog, Cat, Bird or Reptile)");
         printf("\n       Press any key to continue");
@@ -193,6 +196,7 @@ void load_animal_age()
         else
         {
             printf("\nError: That is an invalid input");
+            printf("\nHelp:  Please enter your pet's age");
             printf("\n       Press any key to continue");
             getch();
         }
@@ -217,12 +221,25 @@ void load_animal_castration_info()
     {
         if (is_input_numeric() == 1)
         {
-            pet_is_neutered[idx_curr_pet] = atoi(tmp);
-        curr_state++; // Move to next state.
+            if (tmp[0] == '1' || tmp[0] == '0')
+            {
+                pet_is_neutered[idx_curr_pet] = atoi(tmp);
+                curr_state++; // Move to next state.
+            }
+            else
+            {
+                printf("\nError: That is an invalid input");
+                printf("\nHelp:  Please enter your pet's Castration Status");
+                printf("\n       0=Not Neutered 1=Neutered");
+                printf("\n       Press any key to continue");
+                getch();
+            }
         }
         else
         {
             printf("\nError: That is an invalid input");
+            printf("\nHelp:  Please enter your pet's Castration Status");
+            printf("\n       0=Not Neutered 1=Neutered");
             printf("\n       Press any key to continue");
             getch();
         }
@@ -247,12 +264,25 @@ void load_animal_accident_info()
     {
         if (is_input_numeric() == 1)
         {
-            pet_had_accident[idx_curr_pet] = atoi(tmp);
-            curr_state++; // Move to next state.
+            if (tmp[0] == '1' || tmp[0] == '0')
+            {
+                pet_had_accident[idx_curr_pet] = atoi(tmp);
+                curr_state++; // Move to next state.
+            }
+            else
+            {
+                printf("\nError: That is an invalid input");
+                printf("\nHelp:  Please enter your pet's Accident Status");
+                printf("\n       0=No Accident 1=Had Accident");
+                printf("\n       Press any key to continue");
+                getch();
+            }
         }
         else
         {
             printf("\nError: That is an invalid input");
+            printf("\nHelp:  Please enter your pet's Accident Status");
+            printf("\n       0=No Accident 1=Had Accident");
             printf("\n       Press any key to continue");
             getch();
         }
@@ -381,7 +411,7 @@ void print_result()
 
 int main(int argc, const char **argv)
 {
-    system("color F9");
+    system("color f9");
     // Initialize data arrays.
     owner_first_name[0] = '\0';  // Empty string.
     owner_surname[0] = '\0';   // Empty string.
