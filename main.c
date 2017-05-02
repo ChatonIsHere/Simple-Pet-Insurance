@@ -2,9 +2,18 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
+#include <windows.h>
+
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 // Variables for the state machine control flow.
-int curr_state = 0;						            // Number identifying  the current state of program (0 - loading of owner first name,
+int curr_state = -1;						            // Number identifying  the current state of program (0 - loading of owner first name,
                                                     //                                                  1 - loading of owner surname,
                                                     //                                                  2 - loading animal name,
                                                     //                                                  3 - loading animal gender,
@@ -58,6 +67,14 @@ int is_input_numeric()
     return 1;
 }
 
+void welcome()
+{
+    printf("Welcome to a Simple Pet Insurance program");
+    printf(ANSI_COLOR_GREEN "\nPress any key to begin" ANSI_COLOR_RESET);
+    getch();
+    curr_state++;
+}
+
 void load_customer_first_name()
 {
     system("cls");
@@ -66,8 +83,8 @@ void load_customer_first_name()
     scanf("%s", owner_first_name); // Load the customer name using scanf().
     if (owner_first_name[0] == '?') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your first name");
-        printf("\n      Press any key to continue");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your first name");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else // If user entered valid data, then switch current state to 1 (i.e. animal name loading) and return.
@@ -84,8 +101,8 @@ void load_customer_surname()
     scanf("%s", owner_surname); // Load the customer name using scanf().
     if (owner_surname[0] == '?') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your surname");
-        printf("\n      Press any key to continue");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your surname");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else // If user entered valid data, then switch current state to 1 (i.e. animal name loading) and return.
@@ -102,8 +119,8 @@ void load_animal_name()
     scanf("%s", pet_names[idx_curr_pet]); // Load the info using scanf().
     if (pet_names[idx_curr_pet][0] == '?') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your pet's name");
-        printf("\n      Press any key to continue");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your pet's name");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else // If user entered valid data, store it into data array.
@@ -121,9 +138,9 @@ void load_animal_gender()
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your pet's Gender");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your pet's Gender");
         printf("\n      0=Male 1=Female");
-        printf("\n      Press any key to continue");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else
@@ -135,10 +152,10 @@ void load_animal_gender()
         }
         else
         {
-            printf("\nError: That is an invalid input");
-            printf("\nHelp:  Please enter your pet's Gender");
+            printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's Gender");
             printf("\n       0=Male 1=Female");
-            printf("\n       Press any key to continue");
+            printf("\n       Press any key to continue" ANSI_COLOR_RESET);
             getch();
         }
     }
@@ -152,19 +169,19 @@ void load_animal_type()
     scanf("%c", &pet_type[idx_curr_pet]); // Load the info using scanf().
     if (pet_type[idx_curr_pet] == '?') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your pet's name");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your pet's name");
         printf("\n      Please enter D, C, B or R");
         printf("\n      (Dog, Cat, Bird or Reptile)");
-        printf("\n      Press any key to continue");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else if (pet_type[idx_curr_pet] != 'D' && pet_type[idx_curr_pet] != 'C' && pet_type[idx_curr_pet] != 'B' && pet_type[idx_curr_pet] != 'R')// If user entered invalid animal type, print out error and return. If user entered valid data, store it into data array.
     {
-        printf("\nError: That is an invalid input");
-        printf("\nHelp:  Please enter your pet's name");
+        printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's name");
         printf("\n       Please enter D, C, B or R");
         printf("\n       (Dog, Cat, Bird or Reptile)");
-        printf("\n       Press any key to continue");
+        printf("\n       Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else
@@ -182,8 +199,8 @@ void load_animal_age()
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?' && tmp[1] == '\0') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your pet's age");
-        printf("\n      Press any key to continue");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your pet's age");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else // If user entered valid data, store it into data array.
@@ -195,9 +212,9 @@ void load_animal_age()
         }
         else
         {
-            printf("\nError: That is an invalid input");
-            printf("\nHelp:  Please enter your pet's age");
-            printf("\n       Press any key to continue");
+            printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's age");
+            printf("\n       Press any key to continue" ANSI_COLOR_RESET);
             getch();
         }
     }
@@ -212,9 +229,9 @@ void load_animal_castration_info()
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?' && tmp[1] == '\0') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your pet's Castration Status");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your pet's Castration Status");
         printf("\n      0=Not Neutered 1=Neutered");
-        printf("\n      Press any key to continue");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else // If user entered valid data, store it into data array.
@@ -228,19 +245,19 @@ void load_animal_castration_info()
             }
             else
             {
-                printf("\nError: That is an invalid input");
-                printf("\nHelp:  Please enter your pet's Castration Status");
+                printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+                printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's Castration Status");
                 printf("\n       0=Not Neutered 1=Neutered");
-                printf("\n       Press any key to continue");
+                printf("\n       Press any key to continue" ANSI_COLOR_RESET);
                 getch();
             }
         }
         else
         {
-            printf("\nError: That is an invalid input");
-            printf("\nHelp:  Please enter your pet's Castration Status");
+            printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's Castration Status");
             printf("\n       0=Not Neutered 1=Neutered");
-            printf("\n       Press any key to continue");
+            printf("\n       Press any key to continue" ANSI_COLOR_RESET);
             getch();
         }
     }
@@ -255,9 +272,10 @@ void load_animal_accident_info()
     scanf("%s", tmp); // Load the info using scanf().
     if (tmp[0] == '?' && tmp[1] == '\0') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Please enter your pet's Accident Status");
+        printf(ANSI_COLOR_GREEN "\nHelp: Please enter your pet's Accident Status");
+        printf("\n      Has your pet had an accident in the past year?");
         printf("\n      0=No Accident 1=Had Accident");
-        printf("\n      Press any key to continue");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else // If user entered valid data, store it into data array.
@@ -271,19 +289,19 @@ void load_animal_accident_info()
             }
             else
             {
-                printf("\nError: That is an invalid input");
-                printf("\nHelp:  Please enter your pet's Accident Status");
+                printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+                printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's Accident Status");
                 printf("\n       0=No Accident 1=Had Accident");
-                printf("\n       Press any key to continue");
+                printf("\n       Press any key to continue" ANSI_COLOR_RESET);
                 getch();
             }
         }
         else
         {
-            printf("\nError: That is an invalid input");
-            printf("\nHelp:  Please enter your pet's Accident Status");
+            printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_GREEN "\nHelp:  Please enter your pet's Accident Status");
             printf("\n       0=No Accident 1=Had Accident");
-            printf("\n       Press any key to continue");
+            printf("\n       Press any key to continue" ANSI_COLOR_RESET);
             getch();
         }
     }
@@ -352,11 +370,12 @@ void check_continue()
     system("cls");
     printf("Would you like to add an additional animal?\n"); // Ask user, if they want to add extra animal.
     memset(tmp,'\0',20);
+    fflush(stdin);
     scanf("%c", tmp); // Load user input using scanf().
     if (tmp[0] == '?') // Print help, if user requires it and return.
     {
-        printf("\nHelp: Add an additional animal? Y/N");
-        printf("\n      Press any key to continue");
+        printf(ANSI_COLOR_GREEN "\nHelp: Add an additional animal? Y/N");
+        printf("\n      Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
     else if (tmp[0] == 'N')// If user does not require to add more animals, switch current state to o 7 (i.e. result printing) and return.
@@ -368,8 +387,8 @@ void check_continue()
         if (idx_curr_pet == 9) // If the maximal number of animals per owner would be exceeded, print error message and switch to next (i.e. result printing).
         {
             system("cls");
-            printf("Adding another animal would exceed the limit.");
-            printf("\nPress any key to continue to the print page");
+            printf(ANSI_COLOR_RED "Error: Adding another animal would exceed the limit.");
+            printf("\n       Press any key to continue to the print page" ANSI_COLOR_RESET);
             getch();
             curr_state++;
         }
@@ -381,9 +400,9 @@ void check_continue()
     }
     else
     {
-        printf("\nError: That is an invalid input");
-        printf("\nHelp:  Add an additional animal? Y/N");
-        printf("\n       Press any key to continue");
+        printf(ANSI_COLOR_RED "\nError: That is an invalid input" ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_GREEN "\nHelp:  Add an additional animal? Y/N");
+        printf("\n       Press any key to continue" ANSI_COLOR_RESET);
         getch();
     }
 }
@@ -418,6 +437,7 @@ void print_result()
 
 int main(int argc, const char **argv)
 {
+    SetConsoleTitle("Simple Pet Insurance");
     system("color f9");
     // Initialize data arrays.
     owner_first_name[0] = '\0';  // Empty string.
@@ -444,59 +464,72 @@ int main(int argc, const char **argv)
         // Check the current state so we can do stuff according to it.
         switch (curr_state)
         {
+        case -1:
+            welcome();
+            break;
         // The initial state, where customer name is loaded.
         case 0:
+            SetConsoleTitle("Simple Pet Insurance: Customer First Name");
             load_customer_first_name();
             break;
 
         // The initial state, where customer name is loaded.
         case 1:
+            SetConsoleTitle("Simple Pet Insurance: Customer Surname");
             load_customer_surname();
             break;
 
         // The state, in which the animal name is loaded.
         case 2:
+            SetConsoleTitle("Simple Pet Insurance: Animal Name");
             load_animal_name();
             break;
 
         // The state, in which the animal gender is loaded.
         case 3:
+            SetConsoleTitle("Simple Pet Insurance: Animal Gender");
             load_animal_gender();
             break;
 
         // The state, in which the animal type is loaded.
         case 4:
+            SetConsoleTitle("Simple Pet Insurance: Animal Type");
             load_animal_type();
             break;
 
         // The state, in which the animal age is loaded.
         case 5:
+            SetConsoleTitle("Simple Pet Insurance: Animal Age");
             load_animal_age();
             break;
 
         // The state, in which the animal castration info is loaded.
         case 6:
+            SetConsoleTitle("Simple Pet Insurance: Animal Castration Status");
             load_animal_castration_info();
-            system("cls");
             break;
 
         // The state, in which the animal accident info is loaded.
         case 7:
+            SetConsoleTitle("Simple Pet Insurance: Animal Accident Status");
             load_animal_accident_info();
             break;
 
         // The state, in which the animal insurance price is calculated.
         case 8:
+            SetConsoleTitle("Simple Pet Insurance: Animal Insurance Cost");
             calculate_animal_insurance();
             break;
 
         // The state for deciding, if user wants to continue with adding more animals.
         case 9:
+            SetConsoleTitle("Simple Pet Insurance: Add Another Animal?");
             check_continue();
             break;
 
         // The state for printing the insurance result.
         case 10:
+            SetConsoleTitle("Simple Pet Insurance: Total Price Breakdown");
             print_result();
             break;
         }
